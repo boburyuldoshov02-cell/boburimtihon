@@ -37,6 +37,18 @@ export const AppProvider = ({ children }) => {
     setCart(cart.filter((item) => item.id !== productId));
   };
 
+  const updateQuantity = (productId, quantity) => {
+    if (quantity <= 0) {
+      removeFromCart(productId);
+    } else {
+      setCart(
+        cart.map((item) =>
+          item.id === productId ? { ...item, quantity } : item
+        )
+      );
+    }
+  };
+
   const addProduct = (newProduct) => {
     setProducts([...products, { ...newProduct, id: Date.now() }]);
   };
@@ -53,6 +65,7 @@ export const AppProvider = ({ children }) => {
         loading,
         addToCart,
         removeFromCart,
+        updateQuantity,
         addProduct,
         deleteProduct,
       }}

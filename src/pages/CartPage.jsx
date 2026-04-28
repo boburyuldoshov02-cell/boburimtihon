@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
-import { Trash2, ShoppingBag } from 'lucide-react';
+import { Trash2, ShoppingBag, Plus, Minus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const CartPage = () => {
-  const { cart, removeFromCart } = useContext(AppContext);
+  const { cart, removeFromCart, updateQuantity } = useContext(AppContext);
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   if (cart.length === 0) {
@@ -32,10 +32,24 @@ const CartPage = () => {
               <img src={item.thumbnail} alt={item.title} className="w-20 h-20 object-cover rounded-md" />
               <div className="flex-1">
                 <h3 className="font-semibold text-lg text-gray-800">{item.title}</h3>
-                <p className="text-gray-500 text-sm">Quantity: {item.quantity}</p>
+                <div className="flex items-center gap-3 mt-2">
+                  <button
+                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-700 p-1 rounded-md transition-colors"
+                  >
+                    <Minus size={16} />
+                  </button>
+                  <span className="text-gray-700 font-semibold w-8 text-center">{item.quantity}</span>
+                  <button
+                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-700 p-1 rounded-md transition-colors"
+                  >
+                    <Plus size={16} />
+                  </button>
+                </div>
               </div>
               <div className="text-right">
-                <p className="font-bold text-lg text-gray-900">${item.price * item.quantity}</p>
+                <p className="font-bold text-lg text-gray-900">${(item.price * item.quantity).toFixed(2)}</p>
                 <button
                   onClick={() => removeFromCart(item.id)}
                   className="text-red-500 hover:text-red-700 mt-2 flex items-center gap-1 text-sm ml-auto"
